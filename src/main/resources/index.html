@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slumpmässigt ord</title>
+    <style>
+        /* Kolla 'undersöka' */
+        .so {
+            font-family: "Source Serif Pro";
+            font-size: 18px
+        }
+        .so a {
+            /*text-decoration: none;*/
+            /*color: blue;*/
+            font-family: "Source Serif Pro";
+        }
+        .so .lemmalista {
+            font-size: 18px;
+            /* line-break: after-white-space; */
+        }
+        .so .superlemma {
+            padding: 0.2em;
+            margin-bottom: 1em;
+        }
+        .so .lemvar {
+            padding-left: 1em;
+            text-indent: -1em;
+            margin-bottom: 0.2em;
+        }
+        .so .lemvar > .subtype {
+            text-indent: 0em;
+        }
+        .so .lemvarhuvud {
+            display: block;
+        }
+        .so .kortform > .lemvarhuvud {
+            display: inline-block;
+            font-size: 18px;
+        }
+        .so .lemvarhuvud sup {
+            font-weight: bold;
+            /*color: #BD362F;*/
+            color: #001A50;
+        }
+        .so .lemvarhuvud .orto {
+            /*color: #BD362F;*/
+            color: #001A50;
+        }
+        .so .forkhuvud {
+            display: inline-block;
+        }
+        .so .forkhuvud .orto {
+            font-size: 18px;
+            margin-right: 0em !important;
+        }
+        .so .orto {
+            display:inline;
+            font-weight: bold;
+            /*font-size: 0.75rem;*/
+            font-size: 22px;
+            white-space: nowrap;
+            margin-right: 0.5em;
+        }
+        .so .bojning_inline {
+            display:inline;
+            font-size: 18px;
+            font-style: italic;
+        }
+        .so .bojning {
+            display:inline;
+        }
+        .so .bojning_inline .sep {
+            font-size: 15px;
+        }
+        .so .tempmm {
+            display:inline;
+            font-style: normal;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+        .so .avstav {
+            display: none;
+        }
+        .so .ordklass {
+            display:block;
+            font-size: 18px;
+            margin-left: 1.0em;
+            margin-bottom: 0.2em;
+        }
+        .so .ordklass:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant:small-caps;
+            color:DarkSlateGray;
+            content: "ORDKLASS: ";
+        }
+        .so .uttalblock {
+            font-size: 18px;
+            margin-left: 1.0em;
+            margin-bottom: 0.2em;
+        }
+        .so .uttalblock:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant:small-caps;
+            color:DarkSlateGray;
+            content: "UTTAL: ";
+        }
+        .so .uttal {
+            font-family: "Georgia", serif;
+            font-size: 17px;
+            display:inline-block;
+            font-style: normal;
+            font-weight: normal;
+            margin-left: 0.3em;
+        }
+        .so .ukom {
+            font-family: "Source Serif Pro";
+            display: inline;
+            font-size: 14px;
+            padding-left: 0.3em;
+        }
+        .so .condensed_accent {
+            letter-spacing: -0.15em;
+            margin-left: -0.15em;
+            font-weight: normal;
+        }
+        .so .lexemdiv {
+            margin-top: 1em;
+        }
+        .so .lexem {
+            display: block;
+            font-size: 18px;
+            padding-left: 1em;
+            margin-bottom: 1em;
+        }
+        .so .kbetydelse {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 0.3em;
+        }
+        .so .punkt {
+            display: inline-block;
+            font-weight: bold;
+            font-size: 18px;
+            min-width: 0.7em;
+            margin-left: -1.0em;
+        }
+        .so .def {
+            display:inline;
+            font-size: 18px;
+        }
+        .so .deft {
+            display:inline;
+            font-size: 15px;
+        }
+        .so .hv {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 0.3em;
+        }
+        span.hv {
+            display: inline;
+        }
+        .so .hvtyp {
+            font-size: 15px;
+            font-variant:small-caps;
+            text-transform: uppercase;
+            color:DarkSlateGray;
+            font-weight: bold;
+        }
+        .so .expansion {
+            /*color: #BD362F;*/
+            color: #b38e26;
+            width: 100%;
+            font-size: 15px;
+            text-align:right;
+            display: block;
+            font-variant:small-caps;
+            font-weight: bold;
+        }
+        .so .expansion:before {
+            content: "DÖLJ −";
+        }
+        .so .collapsed:before {
+            content: "VISA MER +";
+        }
+        .so .detaljer {
+            display:block;
+        }
+        .so .expansion + .detaljer {
+            padding-right: 4px;
+            /*border-right: 1px solid #BD362F;*/
+            border-right: 1px solid #b38e26;
+        }
+        .so .collapsed + .detaljer {
+            display:none;
+        }
+        .so .hidden + .detaljer {
+            padding-right: 0px;
+            border: 0px;
+        }
+        .so .hidden {
+            display:none;
+        }
+        .so .mxblocklx {
+            font-size: 18px;
+            margin-bottom: 0.6em;
+        }
+        .so .mxblocklx:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant:small-caps;
+            color:DarkSlateGray;
+            content:"SAMMANSÄTTN./AVLEDN.: ";
+        }
+        .so .valens {
+            display: block;
+            font-size: 18px;
+            font-style: normal;
+            margin-bottom: 0.3em;
+        }
+        .so .valens:before {
+            font-weight: bold;
+            font-size: 15px;
+            font-variant:small-caps;
+            color:DarkSlateGray;
+            content:"KONSTRUKTION:";
+            padding-bottom: 0.4em;
+        }
+        .so details[open] {
+            /* border-left: 1px solid blue; */
+        }
+        .so details {
+            border-left: 1px solid transparent;
+        }
+        .so summary {
+            font-size: 15px;
+            /* display är satt till 'block' av "bootstrap" */
+            display: list-item;
+        }
+        .so summary:focus {
+            outline: none;
+        }
+        .so summary::marker {
+            /*color: blue;*/
+            color: #001A50;
+        }
+        .so summary::-webkit-details-marker {
+            /*color: blue;*/
+            color: #001A50;
+        }
+        .so span.vt {
+            display: block;
+            margin-left: 0.9em;
+            font-size: 18px;
+            font-style: italic;
+        }
+        .so summary > .vt {
+            display: inline;
+            margin-left: 0em;
+        }
+        .so div.vt {
+            padding-left: 1.5em;
+            font-size: 18px;
+            font-style: italic;
+        }
+        .so .sxblocklx {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 0.6em;
+        }
+        .so .sxblocklx:before {
+            font-weight: bold;
+            font-size: 15px;
+            font-variant:small-caps;
+            color:DarkSlateGray;
+            content:"EXEMPEL: ";
+        }
+        .so .syntex {
+            display: inline;
+            font-style: italic;
+            font-weight: normal;
+        }
+        .so .cykel {
+            display: block;
+            margin-bottom: 0.8em;
+        }
+        .so .cbetydelse {
+            display: block;
+            font-size: 18px;
+        }
+        .so .utv {
+            display: inline;
+            font-size: 14px;
+        }
+        .so .idiom {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 0.6em;
+        }
+        .so .idiomlexblock {
+            display: inline;
+        }
+        .so .etymologiblock {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 0.3em;
+        }
+        .so .etymologiblock:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant: small-caps;
+            color: DarkSlateGray;
+            content: "HISTORIK:";
+        }
+        .so .etymologi {
+            display: inline;
+        }
+        .so .fb {
+            display: inline;
+            font-size: 18px;
+        }
+        .so .et {
+            display: inline;
+            font-size: 18px;
+        }
+        .so .fkomblock {
+            display: inline;
+            font-size: 14px;
+        }
+        .so .fkomblock:before {
+            content: "(";
+        }
+        .so .fkomblock:after {
+            content: ")";
+        }
+        .so .fkom2 {
+            display: inline-block;
+            font-size: 14px;
+            margin-left: 0.2em;
+        }
+        .so .fkom2 > a {
+            font-size: 18px;
+        }
+        .so .hkom {
+            display: inline;
+            font-size: 14px;
+            margin-right: 0.3em;
+        }
+        .so .hkom:before {
+            content:"<";
+        }
+        .so .hkom:after {
+            content:"> ";
+        }
+        .so .verbpekare {
+            display: block;
+            font-size: 18px;
+            margin-left: 1em;
+            margin-bottom: 0.3em;
+        }
+        .so .verbpekare:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant: small-caps;
+            color: DarkSlateGray;
+            content: "RELATERAD(E) VERBFÖRBINDELSE(R): ";
+        }
+        .so .sentenser {
+        }
+        .so .sentens {
+            display: block;
+            border-top: 1px solid;
+            border-bottom: 1px solid;
+            margin-bottom: 1em;
+            font-size: 18px;
+            padding: 0.5em;
+        }
+        .so .ur {
+            font-size: 18px;
+            display: inline;
+        }
+        .so .hvhomo {
+            display:inline;
+            font-size: 13px;
+            font-style: normal;
+            vertical-align: super;
+        }
+        .so .vnomen {
+            margin-bottom: 0.3em;
+            font-size: 18px;
+            padding-left: 1em;
+        }
+        .so .vnomen:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant: small-caps;
+            color: DarkSlateGray;
+            content: "DET ATT ";
+        }
+        .so .mx.mark,
+        .so .bojning.mark,
+        .so .syntex.mark,
+        .so .vnomen_item.mark,
+        .so .forkhuvud > .orto.mark {
+            background-color: #fff2ac80;
+            background-image: linear-gradient(to right, #ffe35990 0%, #fff2ac80 100%);
+        }
+        .so @keyframes fadeout {
+                to {
+                    background-color:#ffffff;
+                }
+            }
+        .so .lexem.mark,
+        .so .kbetydelse.mark,
+        .so .cbetydelse.mark,
+        .so .idiom.mark {
+            background-color: #fff2ac80;
+            animation: fadeout 2s forwards;
+            animation-delay: 2s;
+        }
+        .so .hvtag {
+            font-size: 18px;
+        }
+        .so .footer {
+            padding-bottom: 2em;
+        }
+        .so .unicode_img {
+            height: 1.2em;
+            width: 1.2em;
+            margin: -0.3em;
+        }
+        .so .besl {
+            font-family: "Georgia", serif;
+            font-size: 17px;
+            font-style:italic;
+            white-space: nowrap;
+        }
+        .so .nowrap {
+            white-space: nowrap;
+        }
+        .so .varning {
+            display:none;
+            color: Red;
+            font-size: 13px;
+        }
+        .so .idiomdef {
+            display: inline;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: normal;
+        }
+        .so .vnomen_head {
+            font-style: italic;
+        }
+        .so .vnomen_head:after {
+            content: ": ";
+            font-style: normal;
+        }
+        .so .ovrigt {
+            display: block;
+            font-size: 18px;
+            position: relative;
+            margin-left: 1em;
+        }
+        .so .ovrigt:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant:small-caps;
+            color:DarkSlateGray;
+            content:"ÖVRIGT: ";
+        }
+        .so .wordofday-header {
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.2em;
+        }
+        .so .wordofday-link {
+            font-size: 18px;
+            margin-left: 1em;
+            margin-bottom: 1em;
+        }
+        .so .wordofday-toggle {
+            font-size: 18px;
+            margin-left: 1em;
+        }
+        .so .kortform {
+            display: block;
+            font-size: 18px;
+            margin-left: 1em;
+            color:DarkSlateGray;
+        }
+        .so div.hidden-bform {
+            width: 0px;
+            height: 0px;
+            overflow: hidden;
+        }
+        .so .forkort {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: 1em;
+        }
+        .so .forkort:before {
+            font-size: 15px;
+            font-weight: bold;
+            font-variant: small-caps;
+            color: DarkSlateGray;
+            content: "FÖRK.: ";
+        }
+        .so .fras {
+            font-size: 18px;
+            color: navy;
+        }
+        .so .fras2 {
+            font-size: 18px;
+            color: navy;
+        }
+        /* PWA 2020-12-08 - Not cleaned below */
+        .so .vnomen>.orto:not(:last-child):after {content:", ";}
+        .so .idiomexblock {display:inline;padding-top: 0.3em; padding-right: 0.3em;}
+        .so .idiomex {display: inline; font-weight: normal ; font-size: 18px; font-style:italic;  }
+        .so .idiomdef+.idiomexblock:before {
+            font-weight: normal;
+            font-style: normal;
+            font-variant:small-caps;
+            content:": ";
+        }
+        .so .idiomdeft {display:inline; font-size: 14px; font-style: normal; font-weight: normal;padding-left: 0.3em; }
+        /*
+        .so .idiomdeft+.idiomexblock:before {
+          font-weight: normal;
+          font-style: normal;
+          font-variant:small-caps;
+          content:": ";
+        }*/
+        .so .idiomcyk+.idiomexblock:before {
+            content:" ";
+        }
+        .so .pekare {display: block;font-size: 18px; font-style: normal; padding-top: 0.2cm ;padding-right: 0px ; max-width:11cm;}
+        .so .pekare>a {padding-right:0px;display: inline-block;  font-style: italic;}
+        .so .pekare>a:not(:last-child):after{content:", ";white-space: pre; }
+        .so .pekare>.tillord:not(:last-child):after{content:", ";white-space: pre; }
+        .so .mpekare  {display: block; font-size: 18px;  }
+        .so .bpekare>a {padding-right:0px;  display: inline-block;  font-style: italic;}
+        .so .bpekare>span+span:not(:last-child):before{content:", ";white-space: pre; }
+        .so .bpekare>span+span:last-child:before{content:" och ";white-space: pre; }
+        .so .mpekare {display: block; font-size: 18px;  }
+        .so .mpekare>a {padding-right:0px;display: inline-block;  font-style: italic;}
+        .so .mpekare>span+span:not(:last-child):before{content:", ";white-space: pre; }
+        .so .mpekare>span+span:last-child:before{content:" och ";white-space: pre; }
+        .so .pekare:before { font-weight: bold;  font-style: normal;font-variant:small-caps; color:DarkSlateGray;content:"Närliggande ord: ";}
+        .so .verbpekare>.tillord:not(:last-child):after{content:", ";white-space: pre; }
+        .so .info {background-color: lightBlue;font-size: 18px; }
+        .so .markera {background-color: lightBlue;}
+        .so .internt {
+            display:none;
+            color: Tomato;}
+        .so .kt {display: none;}
+        .so .ul {display: block; margin-left: 1cm; }
+        .so .ir {width: 10px; height: 12px; position: relative; bottom: -2px;}
+        .so .overline {text-decoration: overline;}
+        .so .lexemid {font-size: 18px; font-style:italic; font-weight: normal;}
+        .so .f {font-size: 0.8rem; font-style: normal; font-weight: bold;}
+        .so .venster {display:inline;position: relative; left: -0.6cm;}
+        .so .homonr {display:inline; font-size: 14px; font-style: normal ;vertical-align: super; font-weight: bold;}
+        .so .grundform {display:inline; font-size: 0.8rem; font-style: normal; font-weight: bold;color: black; }
+        .so .altkom {position: relative;  font-weight: normal;}
+        .so .alt_uttal {display:block; font-size: 0.8rem; font-style: normal; font-weight: normal;padding-left: 0.3em;}
+        .so .ordbildning {display:none; font-size: 18px; font-style: normal; font-weight: normal;padding-left: 1em;padding-top: 0.3em;}
+        .so .segmentering {display:none; font-size: 18px; font-style: normal; font-weight: normal;padding-left: 1em;padding-top: 0.3em;}
+        .so .avstav {display: none; font-size: 18px; font-style: normal; font-weight: normal;padding-left: 1em;padding-top: 0.3em;color:HotPink;}
+        .so .ordbildn {display:inline; font-size: 18px; font-weight: bold; }
+        .so .ordbprep {display:inline; font-size: 18px; font-weight: normal; }
+        .so .ordbildn:first-child  {padding-left: 3em;}
+        .so .ordbildnx {font-size: 18px; font-weight: normal;display: block;position: relative; left: -0.4cm;padding-top:0.2em;}
+        .so .ordbildnx:before {padding-top: 0.2em ;font-size: 14px; font-style: normal;font-variant:small-caps;color:gray; content:"Subst:\a0";float:left;}
+        .so .ordbtxt {display:none;font-size: 14px; font-style: normal;font-weight: normal; padding-right: 2em;color:gray;font-variant:small-caps;position:relative;left:-1em;}
+        .so .bt {display:inline; font-size: 0.8rem; font-style: normal; font-weight: normal;}
+        .so .pf {display:inline;   font-size: 14px; font-style: normal; font-weight: normal;}
+        .so .hkomxx:before{content: "<";}
+        .so .hkomxx:after{content: ">";}
+        .so .ikom {display:inline; font-style: normal; font-weight: normal;font-size: 14px; margin-right: 0.5em;}
+        .so .idiomcyk + .ikom {margin-left:0.5em;}
+        .so .ikom:before{content: "<";}
+        .so .ikom:after{content: ">";}
+        .so .ukom {display:inline; font-style: normal; font-weight: normal;font-size: 14px; padding-left: 0.3em; padding-right: 0.2em; }
+        .so .fkom { display:inline; font-size: 14px; font-style: normal; font-weight: normal;} /* obs ej padding right pga högerparentes efter */
+        .so .k { font-style: italic ;}
+        .so .anm {display:inline; font-size: 18px; font-style: normal;padding-left: 0.3em; font-weight: normal ;}
+        tempus {font-style: normal; font-size: 14px;}
+        .so .sep {font-style: normal; }
+        .so .boj_uttal {font-style: normal;}
+        .so .aveneller {font-style: normal; font-size: 14px;}
+        .so .pt { display:inline; font-size: 14px; font-style: normal; font-weight: normal; }
+        .so .sup {font-size: 14px; vertical-align: super;}
+        .so .siku {font-size: 14px; vertical-align: super;}
+        .so .fm {display:none; font-weight: bold  ;font-size: 0.8rem;}
+        .so .alt {display:block; font-size: 18px;padding-right: 0.5em;}
+        .so .alt:before {font-size: 14px; font-style: normal;font-variant:small-caps; color:gray;content: "Alternativform: ";}
+        .so .pm {display:inline; font-weight: bold  ;font-size: 18px;}
+        .so .fk {display:inline; font-weight: normal ;font-size: 18px;}
+        .so .etny {display:inline; font-weight: normal ;font-size: 18px;padding-left: 0.5em;}
+        .so .etny:before{display: none;font-weight:bold; content: attr(id); font-size: 18px; color: HotPink;position: relative; left: -7em;}
+        .so .vinkel {font-size: 18px; font-style: normal;}
+        .so .bruk {font-size: 18px; font-style: normal;}
+        .so .fack {display: none; font-size: 18px; font-style: normal; font-weight: normal; color: HotPink;}
+        .so .fack:before {content: " <";}
+        .so .fack:after {content: "> ";}
+        .so .tanke {font-size: 18px; font-style: normal;}
+        .so .idfkom {display: inline; font-weight: normal ; font-size: 14px; font-style:normal;}
+        .so .idfkom:before {content: "(";}
+        .so .idfkom:after {content: ") ";}
+        .so .etymologi2 {display: block;  color:black;font-style: normal;font-size: 14px;   padding-left: 5.5em;margin:0; }
+        .so .etymologi2:before {display: none; padding-top: 0.2em; font-size: 14px; font-style: normal;font-variant:small-caps;content: "Etymologi: ";}
+        .so .kastas {display: none;}
+        .so .fon {font-style: italic; font-weight: bold;}
+        .so .ls {font-style: italic; font-weight: bold;}
+        .so .ms {font-size: 18px; font-style: normal;}
+        .so .hv0 {display: block;}
+        .so .hv0:before {padding-top: 0.2em ;font-size: 14px;font-style: normal;font-variant:small-caps; color:gray;content:"Se";}
+        .so .hvtyp2{display: none; font-style: italic;padding-left: 0.2em; padding-right: 0.2em;color:HotPink;}
+        .so .hv1{display: block;font-size: 18px;font-style: normal;padding-right: 1em;position:relative;left:-1em;padding-top:0.2em; }
+        .so .hv1:before {padding-top: 0.2em ;font-size: 14px;font-style: normal;font-variant:small-caps; color:gray;content:"Synonym:";}
+        .so .hv2{display: block;font-size: 14px;font-style: normal;padding-right: 1em;position:relative;left:-1em;padding-top:0.2em;}
+        .so .hv2:before {padding-top: 0.2em ;font-size: 14px;font-style: normal;font-variant:small-caps; color:gray;content:"Motsats:";}
+        .so .hv3{display: block;font-size: 14px;font-style: normal;padding-right: 2em;position:relative;left:-1em;padding-top:0.2em;}
+        .so .hv3:before {padding-top: 0.2em ;font-size: 14px;font-style: normal;font-variant:small-caps; color:gray;content:"Se";}
+        .so .hv4{display: block;font-size: 14px;font-style: normal;padding-right: 1em;position:relative;left:-1em;padding-top:0.2em;}
+        .so .hv4:before {padding-top: 0.2em ;font-size: 14px;font-style: normal;font-variant:small-caps; color:gray;content:"Jämför:";}
+        .so .b {font-weight: bold}
+        .so .etymologi>.ur:before {content:" ("; padding-left:0.3em;}
+        .so .etymologi>.ur:not(:last-child):after {content:"); ";}
+        .so .etymologi>.ur:last-child:after {content:")";}
+        .so .ur>a {  display: inline;}
+        .so .scriptonly {display:block; color: blue; font-size: 18px; text-align:right;}
+        h4 {margin-bottom: 0em;}
+        hvlnk:link {text-decoration: underline; color: blue; }
+        .so .a {font-variant:normal; padding-left: 0.5em;}
+        a.mer:link {text-decoration: none; color: blue;font-size: 14px;display:block;}
+        .so .stilruta {display: block; background-color: #E4E7EB; font-style: normal; font-weight: normal; font-size: 18px; line-height: 1.5em;}
+        .so .ref {display: block; font-style: italic; margin-left: 1em;}
+        .so .mxref {display: block; font-size: 18px;  padding-top:0.5em;}
+        .so .mxreford {font-weight: bold; font-size: 0.8rem;}
+        .so .mxreford:after {content:" → "; font-weight: normal;}
+        .so .pekord {font-weight: bold; font-size: 0.8rem;}
+        .so .pekord:after {content:" → "; font-weight: normal;}
+        .so .mxrefxx:not(:last-child):after{content: "\a-----"; white-space: pre-wrap;}
+        .so .pekarexx:not(:last-child):after{content: "\a-----"; font-size: 18px;}
+        .so .idiomref {display: none; font-size: 14px; color: HotPink;}
+        .so .hvref {display: none; font-size: 14px; color: HotPink;}
+        .so .hvref + .hvref:before{display: none;font-size: 14px;font-style: normal;font-variant:small-caps; color:HotPink;content:", ";}
+        .so .hvref0 {display: none; font-size: 14px; color: HotPink;}
+        .so .hvref0:before{display: none; font-size: 14px;font-style: normal;font-variant:small-caps; color:HotPink;content:"Nollhänvisning till detta lemma från: ";}
+        .so .saknadefinns {display: none; text-align: right; padding-top: 0em; font-size: 14px; color: Red; }
+        .so .saknadefinnstxt {display: none; text-align: right; padding-top: 0em; font-size: 14px; color: Red; }
+        .so .ftag>a {color: black;font-weight: normal;}
+        .so .idiomref>a {display: none; text-decoration: underline; color: HotPink;}
+        .so .hvref>a {display: none; text-decoration: underline; color: HotPink;}
+        .so .hvref0>a {display: none; text-decoration: underline; color: HotPink;}
+        .so .visning {display: block;font-size: 18px;}
+        .so .kortformxxx:not(:first-child):before{content: "; ";}
+        .so .struket {display:none; color: Red; font-size: 13px;}
+        .so .rott {display: none;color: Red; font-size: 13px;}
+        .so .gront {display:none; color: Green; font-size: 14px;}
+        .so .obs {display:block; color: Red; font-size: 18px;}
+        .so .mx_old {display: none; }
+        .so .copyr {font-size: 18px; padding-top:5em;}
+        .so .subtypexx {padding-top:1em;}
+        .so .sentenser>summary {font-size: 15px;}
+        .so .cshow .wordclass {
+            font-size: 75%;
+        }
+        .so .cshow .dig {
+            font-size: 75%;
+            vertical-align: super;
+        }
+        .so .so .article { -webkit-text-size-adjust: none; font-size: 20px; }
+        .so .so .article { font-family: "Georgia", serif; line-height: 1.1em; margin-left: 20px; padding-right: 10px; }
+        .so .sxextra {font-size: 15px; font-style: normal;}
+        .so .exempelblock { display: block; padding-bottom: 0.3em; padding-left: 0px;}
+        .so .mx {display:inline; font-style: italic;}
+        .so .mxblock {display:block;font-weight: normal;padding-bottom: 0.3em; font-size: 16px;}
+        .so .ovrigt {display:block; font-size: 18px; font-style: normal; font-weight:normal;position: relative;}
+        .so .ovrigt:before {font-size: 15px;  font-weight: bold; font-style: normal;font-variant:small-caps; color:DarkSlateGray; content:"ÖVRIGT: ";}
+        .so .sxblock {display:block;font-size: 18px; font-weight: normal;padding-bottom: 0.3em; padding-left: 0px;}
+        .so .sxblock:before { font-weight: bold;  font-size: 15px; font-style: normal;font-variant:small-caps; color:DarkSlateGray;content:"EXEMPEL: ";}
+        .so .kollblocklx {display:block;font-size: 18px; font-weight: normal;padding-bottom: 0.3em; padding-left: 0px;}
+        .so .kollblocklx:before { font-weight: bold; font-size: 15px; font-style: normal;font-variant:small-caps; color:DarkSlateGray;content:"KOLLOKATIONER: ";}
+        .so .vt>em {font-style: normal;font-variant:small-caps;}
+        .so .besl>em {font-style: normal;padding-left: 0.1em;}
+        .so .caps {font-style: normal;font-variant:small-caps;}
+        span.vtxxxx+.vt:before {content: "\A"; white-space: pre; }
+        .so .hkom:before { content:"<"; }
+        .so .hkom:after { content:"> "; }
+        .so .idiomcyk { display:inline; font-size: 14px; font-style: normal; font-weight: normal;  padding-right: 0.4em;}
+        .so .idiomxnr:after {content:". ";}
+        .so .hvxx>a {    color: #b38e26;
+            padding-right:0px;}
+        .so .xxhv>a:not(:last-of-type):after {content:", ";}
+        .so .moder {display:block;font-size: 14px; }
+        .so .moder:before {padding-top: 0.2em ;font-size: 14px; font-style: normal;font-weight: normal;font-variant:small-caps; color:gray;content:"BILDAT TILL: "}
+        .so .rubrikord {color: red; font-size: 0.78rem; background: White;}
+        .so .tjockare { font-size: 0.78rem; font-weight: bold;}
+
+    </style>
+</head>
+<body>
+    <div class="so">
+        <h3>Få ett slumpmässigt ord från svenska ordlistan.</h3>
+        <a href="/">Home</a>
+
+        <div id="content"/>
+    </div>
+</body>
+</html>
